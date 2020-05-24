@@ -3,10 +3,10 @@ speller, C
 
 TodoList in Speller.c
 
-- [ ] function load
+- [x] function load
     - [x] Loads dictionary into memory
-    - [ ] count total letters
-    - [ ] for each word in dictionary file, store in a data structure
+    - [x] count total letters
+    - [x] for each word in dictionary file, store in a data structure
 
 - [ ] function unload
 - [ ] function check
