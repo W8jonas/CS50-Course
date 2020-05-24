@@ -10,5 +10,5 @@ TodoList in Speller.c
 
 - [ ] function unload
 - [ ] function check
-- [ ] function size
+- [x] function size
 - [ ] function hash
