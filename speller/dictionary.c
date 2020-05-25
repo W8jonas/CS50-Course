@@ -116,13 +116,35 @@ bool load(const char *dictionary)
 unsigned int size(void)
 {
     // TODO
-    return 0;
+    return wordcounter;
+}
+
+// A função se chamará recursivamente até chegar no fim do trie, onde o 
+// ponteiro para o próximo nó é nulo. Nesse momento irá limpar o nó
+bool freeTrie(node* ptr)
+{
+    node* trav = ptr;
+
+    for (int index = 0; index < 27; index++)
+    {
+        if (trav -> children[index] != NULL) // if there is a valid node at that index
+        {
+            freeTrie(trav -> children[index]); // call freeTrie
+        }
+
+    }
+    free(ptr);
+    return true;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
     // TODO
-    return false;
+    return freeTrie(root);
 }
+
+
+
+
 

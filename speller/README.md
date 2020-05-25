@@ -8,7 +8,7 @@ TodoList in Speller.c
     - [x] count total letters
     - [x] for each word in dictionary file, store in a data structure
 
-- [ ] function unload
+- [x] function unload
 - [ ] function check
 - [x] function size
-- [ ] function hash
+- [x] function hash
