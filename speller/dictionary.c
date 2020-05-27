@@ -27,7 +27,41 @@ node *root;
 bool check(const char *word)
 {
     // TODO
-    return false;
+    char word[strlen(word1)];
+    strcpy(word, word1);
+
+    // ponteiro temporario
+    node* current = root;
+    unsigned int index;
+
+    for (int i = 0; i < strlen(word); i++)
+    {
+        // standardize the letters so they're easier to index to
+        word[i] = toupper(word[i]);
+
+        // se for caractere coloca index como valor da letra o valor representado por ela no alfabeto
+        if (isalpha(word[i]))
+        {
+            index = word[i] - 65;
+        }
+        // se for \ coloca index = 26
+        else if (word[i] == '\'')
+        {
+            index = 26;
+        }
+
+        // se não existir a palavra retorne false, se não retorne is_word que é true
+        if (current -> children[index] == NULL)
+        {
+            return false;
+        }
+        else
+        {
+            current = current -> children[index];
+        }
+    }
+
+    return current -> is_word;
 }
 
 // Hashes word to a number

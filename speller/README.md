@@ -9,6 +9,6 @@ TodoList in Speller.c
     - [x] for each word in dictionary file, store in a data structure
 
 - [x] function unload
-- [ ] function check
+- [x] function check
 - [x] function size
 - [x] function hash
