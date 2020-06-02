@@ -29,8 +29,8 @@ bool check(const char *word)
 {
     node *cursor = table[hash(word)];
 
-    //compare words case insensitive
-    if (strcasecmp(cursor->word, word) == 0)
+    
+    if (strcasecmp(cursor->word, word) == 0) //comparando palavras sem distinção de letras maiúsculas
     {
         return true;
     }
@@ -59,33 +59,27 @@ unsigned int hash(const char *word)
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    // opens the dictionary and initializes temporary space to hold the words
-    FILE *file = fopen(dictionary, "r");
+    FILE *file = fopen(dictionary, "r");  // abre o dicionario e armazena em file
     char *dictWord = malloc(LENGTH);
-    if (dictWord == NULL)
+    if (dictWord == NULL)  // testa se conseguiu espaco na memoria para dictWord
     {
         return false;
     }
-
-    // reads file until the end
-    while (fscanf(file, "%s", dictWord) != EOF)
+    
+    while (fscanf(file, "%s", dictWord) != EOF) // leia o arquivo até o fim
     {
-        // allocates memory for a node in which the word will be inserted
-        node *n = malloc(sizeof(node));
+        node *n = malloc(sizeof(node)); // alocando ponteiro para nó
         if (n == NULL)
         {
             return false;
         }
 
-        // copies the word in the chunk of memory allocated and then updates the words count
-        strcpy(n->word, dictWord);
+        strcpy(n->word, dictWord); // copiando a palavra para o nó e contanto o total de palavras
         totalWords++;
 
-        // set next to point at beginning of list
-        n->next = table[hash(dictWord)];
+        n->next = table[hash(dictWord)]; // colocando next apontando para o próximo nó
 
-        // set array to point at n which becomes new beginning of the list
-        table[hash(dictWord)] = n;
+        table[hash(dictWord)] = n; // colocando array apontando para n
     }
 
     fclose(file);
@@ -106,13 +100,12 @@ unsigned int size(void)
 bool unload(void)
 {
     // TODO
-    bool unload(void)
-{
-    // creates two pointers to traverse the linked list and cancel its element without losing its address
+
+    // Criando dois ponteiros para atravessar a trie
     node *tmp;
     node *cursor;
 
-    // repeats for every index in the table
+    // repetindo para cada index na tabela
     for (int i = 0; i < N; i++)
     {
         if (table[i] == NULL)
@@ -123,7 +116,7 @@ bool unload(void)
         cursor = table[i];
         tmp = cursor;
 
-        // until the end of the list keeps freeing the memory allocated in load
+        // limpando todos os nós até o fim da tabela
         while (cursor->next != NULL)
         {
             cursor = cursor->next;
@@ -134,9 +127,3 @@ bool unload(void)
     }
     return true;
 }
-}
-
-
-
-
-
