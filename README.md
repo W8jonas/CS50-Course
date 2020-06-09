@@ -3,15 +3,31 @@ Todos os exercícios resolvidos do curso CS50 de Harvard.
 Nome, linguagem, descrição de cada um:
 Mais detalhes consultar o README de cada exercício.
 
-mario-less, C
+PSET 1 - C
+    Hello
+    cash
+    mario-less
 
-cash, C
+PSET 2 - C
+    readability
+    substitution
 
-readability, C
+PSET 3 - C
+    plurality
+    runoff
 
-substitution, C
+PSET 4 - C
+    filter
+    recover
 
-plurality, C
+PSET 5 - C
+    speller
 
-filter, C
+PSET 6 - Python
+    Hello
+    mario-more
+    cash
+    readability
+    DNA
 
+PSET 7
