@@ -41,8 +41,28 @@ function love.load()
 
 end
 
- 
+
 function love.update(dt)
+
+    if ball:Collides(paddle1) then
+        ball.dx = -ball.dx
+    end
+
+    if ball:Collides(paddle2) then
+        ball.dx = -ball.dx
+    end
+
+    if ball.y <= 0 then
+        ball.dy = - ball.dy
+        ball.y = 0
+    end
+
+    if ball.y > VIRTUAL_HEIGTH then
+        ball.dy = - ball.dy
+        ball.y = VIRTUAL_HEIGTH - 4
+    end
+
+
 
     paddle1:update(dt)
     paddle2:update(dt)
