@@ -41,7 +41,7 @@ function love.load()
 
 end
 
-
+ 
 function love.update(dt)
 
     paddle1:update(dt)
@@ -107,17 +107,25 @@ function love.draw()
     love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGTH/3 )
     love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGTH/3 )
 
-    -- Desenha bola no meio da tela
-    ball:render()
+    
     -- Desenha uma raquete na esquerda
     paddle1:render()
-    -- love.graphics.rectangle('fill', 10, player1Y, 5, 20)
     
     -- Desenha uma raquete na direita
     paddle2:render()
-    -- love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
+    
+    -- Desenha bola no meio da tela
+    ball:render()
 
-
+    displayFPS()
 
     push:apply('end')
+end
+
+
+function displayFPS()
+    love.graphics.setColor(0, 1, 0, 1)
+    love.graphics.setFont(smallFont)
+    love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 40, 5)
+    love.graphics.setColor(1, 1 ,1, 1)
 end
