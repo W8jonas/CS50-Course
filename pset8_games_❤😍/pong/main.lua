@@ -6,8 +6,11 @@ VIRTUAL_HEIGTH = 200
 
 PADDLE_SPEED = 200
 
+Class = require 'class'
 push = require 'push'
 
+require 'Ball'
+require 'Paddle'
 
 function love.load()
     math.randomseed(os.time())
@@ -29,8 +32,8 @@ function love.load()
     player1Score = 0
     player2Score = 0
 
-    player1Y = 30
-    player2Y = VIRTUAL_HEIGTH - 40
+    paddle1 = Paddle(5, 20, 5, 20)
+    paddle2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGTH - 30, 5, 20)
 
     ballX = VIRTUAL_WIDTH/2-2
     ballY = VIRTUAL_HEIGTH/2-2
@@ -47,17 +50,24 @@ end
 
 function love.update(dt)
 
+    paddle1:update(dt)
+    paddle2:update(dt)
+
     if love.keyboard.isDown('w') then
-        player1Y = math.max(0, player1Y - PADDLE_SPEED * dt)
+        paddle1.dy = - PADDLE_SPEED
     elseif love.keyboard.isDown('s') then
-        player1Y = math.min(VIRTUAL_HEIGTH-20, player1Y + PADDLE_SPEED * dt)
+        paddle1.dy = PADDLE_SPEED
+    else
+        paddle1.dy = 0
     end
 
 
     if love.keyboard.isDown('up') then
-        player2Y = math.max(0, player2Y - PADDLE_SPEED * dt)
+        paddle2.dy = - PADDLE_SPEED
     elseif love.keyboard.isDown('down') then
-        player2Y = math.min(VIRTUAL_HEIGTH-20, player2Y + PADDLE_SPEED * dt)
+        paddle2.dy = PADDLE_SPEED
+    else 
+        paddle2.dy = 0
     end
 
     if gameState == 'play' then
@@ -113,10 +123,12 @@ function love.draw()
     love.graphics.rectangle('fill', ballX, ballY, 4, 4)
    
     -- Desenha uma raquete na esquerda
-    love.graphics.rectangle('fill', 10, player1Y, 5, 20)
+    paddle1:render()
+    -- love.graphics.rectangle('fill', 10, player1Y, 5, 20)
     
     -- Desenha uma raquete na direita
-    love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
+    paddle2:render()
+    -- love.graphics.rectangle('fill', VIRTUAL_WIDTH - 10, player2Y, 5, 20)
 
 
 
