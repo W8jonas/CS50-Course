@@ -34,10 +34,18 @@ function love.load()
     player1Score = 0
     player2Score = 0
 
+    servingPlayer = math.random(2) == 1 and 1 or 2
+
     paddle1 = Paddle(5, 20, 5, 20)
     paddle2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGTH - 30, 5, 20)
 
     ball = Ball(VIRTUAL_WIDTH/2 - 2, VIRTUAL_HEIGTH/2 - 2, 5, 5)
+
+    if servingPlayer = 1 then
+        ball.dx = 100
+    else
+        ball.dx = -100
+    end
 
     gameState = 'start'
 
@@ -49,14 +57,18 @@ function love.update(dt)
 
         if ball.x <= 0 then
             player2Score = player2Score + 1 
+            servingPlayer = 1
             ball:reset()
-            gameState = 'start'
+            ball.dx = 100            
+            gameState = 'serve'
         end
 
         if ball.x >= VIRTUAL_WIDTH - 4 then
             player1Score = player1Score + 1 
+            servingPlayer = 2
             ball:reset()
-            gameState = 'start'
+            ball.dx = -100            
+            gameState = 'serve'
         end
 
         if ball:Collides(paddle1) then
@@ -121,6 +133,8 @@ function love.keypressed(key)
     elseif key == 'enter' or key== 'return' then
 
         if gameState == 'start' then
+            gameState = 'serve'
+        elseif gameState == 'serve' then
             gameState = 'play'
         end
     end
@@ -133,12 +147,17 @@ function love.draw()
     love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
     love.graphics.setFont(smallFont)
-    -- if gameState == 'start' then
-    --     love.graphics.printf("Hello Pong! Hit ENTER to Start the game", 0, 20, VIRTUAL_WIDTH, 'center')
-    -- elseif gameState == 'play' then
-    --     love.graphics.printf("Hello Pong!, Press ESC or SCAPE to exit", 0, 20, VIRTUAL_WIDTH, 'center')
-    -- end
+
     
+    if gameState == 'start' then
+        love.graphics.printf('Welcome to Pong!', 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Enter to Play!', 0, 32, VIRTUAL_WIDTH, 'center')
+    elseif gameState == 'serve' then
+        love.graphics.printf('Player ' .. tostring(servingPlayer) .. "'s turn!", 0, 20, VIRTUAL_WIDTH, 'center')
+        love.graphics.printf('Press Enter to serve!', 0, 32, VIRTUAL_WIDTH, 'center')
+    end
+    
+
     love.graphics.setFont(scoreFont)
     love.graphics.print(player1Score, VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGTH/3 )
     love.graphics.print(player2Score, VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGTH/3 )
