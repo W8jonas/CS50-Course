@@ -34,7 +34,7 @@ function love.load()
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGTH, WINDOW_WIDTH, WINDOW_HEIGTH, {
         fullscreen = false,
         vsync = true,
-        resizable = false
+        resizable = true
     })
 
     -- Variáveis globais
@@ -61,6 +61,9 @@ function love.load()
 
 end
 
+function love.resize(w, h)
+    push:resize(w, h)
+end
 
 function love.update(dt)
     if gameState == 'play' then
