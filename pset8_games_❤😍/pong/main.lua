@@ -148,9 +148,18 @@ function love.update(dt)
         end
     
         -- Movimentação do jogador 2
-        if love.keyboard.isDown('up') then
+        -- if love.keyboard.isDown('up') then
+        --     paddle2.dy = - PADDLE_SPEED
+        -- elseif love.keyboard.isDown('down') then
+        --     paddle2.dy = PADDLE_SPEED
+        -- else 
+        --     paddle2.dy = 0
+        -- end
+    
+        -- Movimentação da IA
+        if ball.y <= paddle2.y then
             paddle2.dy = - PADDLE_SPEED
-        elseif love.keyboard.isDown('down') then
+        elseif ball.y >= paddle2.y then
             paddle2.dy = PADDLE_SPEED
         else 
             paddle2.dy = 0
