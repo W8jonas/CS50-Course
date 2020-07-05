@@ -12,6 +12,9 @@ require 'Map'
 
 
 function love.load()
+    
+    math.randomseed(os.time())
+
     map = Map()
 
     love.graphics.setDefaultFilter('nearest', 'nearest')
