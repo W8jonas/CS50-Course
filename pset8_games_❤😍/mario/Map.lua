@@ -1,4 +1,5 @@
 require 'util'
+require 'Player'
 
 Map = Class{}
 
@@ -36,10 +37,10 @@ function Map:init()
 
     self.tileSprites = generateQuads(self.spriteSheet, self.tileWidth, self.tileHeight)
 
+    self.player = Player(self)
 
     self.mapWidthPixel = self.mapWidth * self.tileWidth
     self.mapHeightPixel = self.mapHeight * self.tileHeight
-
 
     -- Colocando céu
     for y = 1, self.mapHeight do 
@@ -47,17 +48,6 @@ function Map:init()
             self:setTile(x, y, TILE_EMPTY)
         end
     end
-
-
-
-
-
-
-
-
-
-
-
 
     -- gerando o terreno usando vertical scan
     local x = 1
@@ -157,6 +147,8 @@ function Map:update(dt)
         self.camX = math.min(self.mapWidthPixel - VIRTUAL_WIDTH, math.floor(self.camX + SCROLL_SPEED * dt))
     end
 
+    self.player:update(dt)
+
 end
 
 
@@ -167,5 +159,8 @@ function Map:render()
                 (x-1) * self.tileWidth, (y-1) * self.tileHeight)
         end
     end
+
+    self.player:render()
+
 end
 
