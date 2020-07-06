@@ -1,5 +1,6 @@
 Player = Class{}
 
+local MOVE_SPEED = 80
 
 function Player:init(map)
     self.width = 16
@@ -15,6 +16,12 @@ end
 
 
 function Player:update(dt)
+
+    if love.keyboard.isDown('a') then
+        self.x = self.x - MOVE_SPEED * dt
+    elseif love.keyboard.isDown('d') then
+        self.x = self.x + MOVE_SPEED * dt
+    end
 
 end
 
