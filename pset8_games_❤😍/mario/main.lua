@@ -38,7 +38,7 @@ function love.keypressed(key)
 end
 
 function love.keyboard.wasPressed(key)
-    return love.keyboard.keysPressed(key)
+    return love.keyboard.keysPressed[key]
 end
 
 

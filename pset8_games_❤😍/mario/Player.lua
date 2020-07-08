@@ -67,6 +67,7 @@ function Player:init(map)
                 self.direction = 'right'
             else 
                 self.animation = self.animations['idle']
+                self.dx = 0
             end
         end,
         ['walking'] = function(dt)
@@ -99,6 +100,7 @@ function Player:init(map)
             if self.y >= map.tileHeight * (map.mapHeight/2-1) - self.height then
                 self.y = map.tileHeight * (map.mapHeight/2-1) - self.height
                 self.dy = 0
+                self.dx = 0
                 self.state = 'idle'
                 self.animation = self.animations[self.state] 
             end
