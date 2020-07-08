@@ -13,7 +13,7 @@ function Player:init(map)
 
     self.x = map.tileWidth * 10
     self.y = map.tileHeight * (map.mapHeight/2-1) - self.height
-
+    self.map = map
     self.dx = 0
     self.dy = 0
 
@@ -113,9 +113,29 @@ end
 function Player:update(dt)
     self.behaviors[self.state](dt)
     self.animation:update(dt)
+    self.currentFrame = self.animation:getCurrentFrames()
+
     self.x = self.x + self.dx * dt
-    self.y = self.y + self.dy * dt
     
+    if self.dy < 0 then
+        if self.map:tileAt(self.x, self.y) ~= TILE_EMPTY or
+            self.map:tileAt(self.x + self.width-1, self.y) ~= TILE_EMPTY then
+
+            self.dy = 0
+
+            if self.map:tileAt(self.x, self.y) == JUMP_BLOCK then
+                self.map:setTile(math.floor(self.x/self.map.tileWidth)+1,
+                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
+            end
+            if self.map:tileAt(self.x + self.width - 1, self.y) == JUMP_BLOCK then
+                self.map:setTile(math.floor((self.x + self.width -1)/self.map.tileWidth) + 1,
+                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
+            end
+        end
+    end
+
+    self.y = math.min(self.y + self.dy * dt, self.map.tileHeight * 
+        ((self.map.mapHeight - 2)/2) - self.height)
 
 end
 
