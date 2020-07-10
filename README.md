@@ -30,4 +30,10 @@ PSET 6 - Python
     readability
     DNA
 
-PSET 7
+PSET 7 - SQL
+
+Tracks: Games
+    Pong
+    Mario
+
+
