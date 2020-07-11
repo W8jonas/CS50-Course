@@ -99,14 +99,14 @@ function Map:init()
             x = x + 1
 
             -- 10% chance de nao fazer nada, criando um buraco
-            elseif math.random(10) ~= 1 then
+            elseif math.random(2) ~= 1 then
 
                 -- criando coluna
                 for y = self.mapHeight /2, self.mapHeight do
                     self:setTile(x, y, TILE_BRICK)
                 end
 
-                -- chance de criar um bloco de puto
+                -- chance de criar um bloco de pulo
                 if math.random(15) == 1 then
                     self:setTile(x, self.mapHeight / 2 - 4, JUMP_BLOCK)
                 end
@@ -124,15 +124,19 @@ end
 
 
 function Map:collides(tile)
+    -- define our collidable tiles
     local collidables = {
-        TILE_BRICK, JUMP_BLOCK, JUMP_BLOCK_HIT, 
+        TILE_BRICK, JUMP_BLOCK, JUMP_BLOCK_HIT,
         MUSHROOM_TOP, MUSHROOM_BOTTOM
     }
+
+    -- iterate and return true if our tile type matches
     for _, v in ipairs(collidables) do
         if tile.id == v then
             return true
         end
     end
+
     return false
 end
 
@@ -148,7 +152,11 @@ end
 
 
 function Map:tileAt(x, y)
-    return self:getTile(math.floor(x / self.tileWidth) + 1, math.floor(y / self.tileHeight) + 1)
+    return {
+        x = math.floor(x / self.tileWidth) + 1,
+        y = math.floor(y / self.tileHeight) + 1,
+        id = self:getTile(math.floor(x / self.tileWidth) + 1, math.floor(y / self.tileHeight) + 1)
+    }
 end
 
 
@@ -157,16 +165,19 @@ function Map:getTile(x, y)
 end
 
 
-function Map:setTile(x, y, tile)
-    self.tiles[(y-1) * self.mapWidth + x] = tile
+function Map:setTile(x, y, id)
+    self.tiles[(y-1) * self.mapWidth + x] = id
 end
 
 
 function Map:render()
     for y = 1, self.mapHeight do
         for x = 1, self.mapWidth do
-            love.graphics.draw(self.spriteSheet, self.tileSprites[self:getTile(x, y)],
-                (x-1) * self.tileWidth, (y-1) * self.tileHeight)
+            local tile = self:getTile(x, y)
+            if tile ~= TILE_EMPTY then
+                love.graphics.draw(self.spriteSheet, self.tileSprites[self:getTile(x, y)],
+                    (x-1) * self.tileWidth, (y-1) * self.tileHeight)
+            end
         end
     end
 
