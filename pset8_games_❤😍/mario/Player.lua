@@ -58,13 +58,17 @@ function Player:init(map)
                 self.state = 'jumping'
                 self.animation = self.animations['jumping']
             elseif love.keyboard.isDown('a') then
-                self.dx = - MOVE_SPEED
-                self.animation = self.animations['walking']
                 self.direction = 'left'
-            elseif love.keyboard.isDown('d') then
-                self.dx = MOVE_SPEED
+                self.dx = - MOVE_SPEED
+                self.state = 'walking'
+                self.animations['walking']:restart()
                 self.animation = self.animations['walking']
+            elseif love.keyboard.isDown('d') then
                 self.direction = 'right'
+                self.dx = MOVE_SPEED
+                self.state = 'walking'
+                self.animations['walking']:restart()
+                self.animation = self.animations['walking']
             else 
                 self.animation = self.animations['idle']
                 self.dx = 0
@@ -86,6 +90,17 @@ function Player:init(map)
             else 
                 self.animation = self.animations['idle']
             end
+
+            self:checkLeftCollision()
+            self:checkRightCollision()
+
+            if not self.map:collides(self.map:tileAt(self.x, self.y+self.height)) and
+                not self.map:collides(self.map:tileAt(self.x + self.width-1, self.y + self.height)) then
+
+                self.state = 'jumping'
+                self.animation = self.animations['jumping']
+            end
+
         end,
         ['jumping'] = function(dt)
             if love.keyboard.isDown('a') then
@@ -104,10 +119,43 @@ function Player:init(map)
                 self.state = 'idle'
                 self.animation = self.animations[self.state] 
             end
+
+            if self.map:collides(self.map:tileAt(self.x, self.y + self.height)) or
+                self.map:collides(self.map:tileAt(self.x + self.width -1, self.y + self.height)) then
+                
+                self.dy = 0
+                self.state = 'idle'
+                self.animation = self.animations[self.state]
+                self.y = (self.map:tileAt(self.x, self.y + self.height).y-1)* self.map.tileHeight - self.height 
+            end
         end
     }
 
 end
+
+function Player:checkLeftCollision()
+    if self.dx < 0 then
+        if self.map:collides(self.map:tileAt(self.x-1, self.y)) or
+            self.map:collides(self.map:tileAt(self.x - 1, self.y + self.height -1)) then
+
+            self.dx = 0
+            self.x = self.map:tileAt(self.x - 1, self.y).x * self.map.tileWidth
+        end
+    end
+end
+
+
+function Player:checkRightCollision()
+    if self.dx > 0 then
+        if self.map:collides(self.map:tileAt(self.x + self.width, self.y)) or
+            self.map:collides(self.map:tileAt(self.x + self.width, self.y + self.height - 1)) then
+
+            self.dx = 0
+            self.x = (self.map:tileAt(self.x + self.width, self.y).x -1)* self.map.tileWidth - self.width
+        end
+    end
+end
+
 
 
 function Player:update(dt)

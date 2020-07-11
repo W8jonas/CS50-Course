@@ -123,6 +123,19 @@ function Map:init()
 end
 
 
+function Map:collides(tile)
+    local collidables = {
+        TILE_BRICK, JUMP_BLOCK, JUMP_BLOCK_HIT, 
+        MUSHROOM_TOP, MUSHROOM_BOTTOM
+    }
+    for _, v in ipairs(collidables) do
+        if tile.id == v then
+            return true
+        end
+    end
+    return false
+end
+
 function Map:update(dt)
     self.player:update(dt)
 
