@@ -4,7 +4,7 @@ require 'Player'
 Map = Class{}
 
 TILE_BRICK = 1
-TILE_EMPTY = 4
+TILE_EMPTY = -1
 
 -- cloud tiles
 CLOUD_LEFT = 6
@@ -26,19 +26,25 @@ local SCROLL_SPEED = 62
 
 
 function Map:init()
+
     self.spriteSheet = love.graphics.newImage('graphics/spritesheet.png')
+    
     self.tileWidth = 16
     self.tileHeight = 16
+    
+    self.tileSprites = generateQuads(self.spriteSheet, self.tileWidth, self.tileHeight)
+
     self.mapWidth = 30
     self.mapHeight = 28
     self.tiles = {}
 
+    self.gravity = 40
+
+    self.player = Player(self)
+
     self.camX = 0
     self.camY = -3
 
-    self.tileSprites = generateQuads(self.spriteSheet, self.tileWidth, self.tileHeight)
-
-    self.player = Player(self)
 
     self.mapWidthPixel = self.mapWidth * self.tileWidth
     self.mapHeightPixel = self.mapHeight * self.tileHeight
@@ -99,7 +105,7 @@ function Map:init()
             x = x + 1
 
             -- 10% chance de nao fazer nada, criando um buraco
-            elseif math.random(2) ~= 1 then
+            elseif math.random(10) ~= 1 then
 
                 -- criando coluna
                 for y = self.mapHeight /2, self.mapHeight do

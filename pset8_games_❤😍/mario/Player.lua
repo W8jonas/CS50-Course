@@ -4,24 +4,36 @@ require "Animation"
 
 local MOVE_SPEED = 80
 local JUMP_VELOCITY = 400
-local GRAVITY = 40
+
 
 
 function Player:init(map)
+    self.x = 0
+    self.y = 0
     self.width = 16
     self.height = 20
 
-    self.x = map.tileWidth * 10
-    self.y = map.tileHeight * (map.mapHeight/2-1) - self.height
+    self.xOffset = 8
+    self.yOffset = 10
+    
     self.map = map
-    self.dx = 0
-    self.dy = 0
-
     self.texture = love.graphics.newImage('graphics/blue_alien.png')
-    self.frames = generateQuads(self.texture, 16, 20)
+    
+
+    self.frames = {}
+
+    self.currentFrame = nil
 
     self.state = 'idle'
     self.direction = 'right'
+ 
+    self.dx = 0
+    self.dy = 0
+
+    self.x = map.tileWidth * 10
+    self.y = map.tileHeight * ((map.mapHeight - 2) / 2) - self.height
+
+    self.frames = generateQuads(self.texture, 16, 20)
 
     self.animations = {
         ['idle'] = Animation {
@@ -50,16 +62,18 @@ function Player:init(map)
     }
 
     self.animation = self.animations['idle']
+    self.currentFrame = self.animation:getCurrentFrame()
 
     self.behaviors = {
         ['idle'] = function(dt)
+
             if love.keyboard.wasPressed('space') then
                 self.dy = -JUMP_VELOCITY
                 self.state = 'jumping'
                 self.animation = self.animations['jumping']
             elseif love.keyboard.isDown('a') then
                 self.direction = 'left'
-                self.dx = - MOVE_SPEED
+                self.dx = -MOVE_SPEED
                 self.state = 'walking'
                 self.animations['walking']:restart()
                 self.animation = self.animations['walking']
@@ -74,16 +88,17 @@ function Player:init(map)
             end
         end,
         ['walking'] = function(dt)
+
             if love.keyboard.wasPressed('space') then
                 self.dy = -JUMP_VELOCITY
                 self.state = 'jumping'
                 self.animation = self.animations['jumping']
             elseif love.keyboard.isDown('a') then
-                self.dx = - MOVE_SPEED
                 self.direction = 'left'
+                self.dx = -MOVE_SPEED
             elseif love.keyboard.isDown('d') then
-                self.dx = MOVE_SPEED
                 self.direction = 'right'
+                self.dx = MOVE_SPEED
             else 
                 self.dx = 0
                 self.state = 'idle'
@@ -107,13 +122,14 @@ function Player:init(map)
             end
             
             if love.keyboard.isDown('a') then
-                self.dx = - MOVE_SPEED
+                self.dx = -MOVE_SPEED
                 self.direction = 'left'
             elseif love.keyboard.isDown('d') then
                 self.dx = MOVE_SPEED
                 self.direction = 'right'
             end
-            self.dy = self.dy + GRAVITY
+
+            self.dy = self.dy + self.map.gravity
 
             -- if self.y >= map.tileHeight * (map.mapHeight/2-1) - self.height then
             --     self.y = map.tileHeight * (map.mapHeight/2-1) - self.height
@@ -134,11 +150,40 @@ function Player:init(map)
 
             self:checkLeftCollision()
             self:checkRightCollision()
-
         end
     }
-
 end
+
+function Player:update(dt)
+    self.behaviors[self.state](dt)
+    self.animation:update(dt)
+    self.currentFrame = self.animation:getCurrentFrame()
+
+    self.x = self.x + self.dx * dt
+    
+    if self.dy < 0 then
+        if self.map:tileAt(self.x, self.y).id ~= TILE_EMPTY or
+            self.map:tileAt(self.x + self.width-1, self.y).id ~= TILE_EMPTY then
+
+            self.dy = 0
+
+            if self.map:tileAt(self.x, self.y).id == JUMP_BLOCK then
+                self.map:setTile(math.floor(self.x/self.map.tileWidth)+1,
+                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
+            end
+            if self.map:tileAt(self.x + self.width - 1, self.y) == JUMP_BLOCK then
+                self.map:setTile(math.floor((self.x + self.width -1)/self.map.tileWidth) + 1,
+                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
+            end
+        end
+    end
+
+    -- self.y = math.min(self.y + self.dy * dt, self.map.tileHeight * 
+    --     ((self.map.mapHeight - 2)/2) - self.height)
+
+    self.y = self.y + self.dy * dt
+end
+
 
 function Player:checkLeftCollision()
     if self.dx < 0 then
@@ -165,56 +210,42 @@ end
 
 
 
-function Player:update(dt)
-    self.behaviors[self.state](dt)
-    self.animation:update(dt)
-    self.currentFrame = self.animation:getCurrentFrames()
 
-    self.x = self.x + self.dx * dt
-    
-    if self.dy < 0 then
-        if self.map:tileAt(self.x, self.y).id ~= TILE_EMPTY or
-            self.map:tileAt(self.x + self.width-1, self.y).id ~= TILE_EMPTY then
+-- function Player:render()
+                
+--     local scaleX
 
-            self.dy = 0
+--     if self.direction == 'right' then
+--         scaleX = 1
+--     else
+--         scaleX = -1
+--     end
 
-            if self.map:tileAt(self.x, self.y).id == JUMP_BLOCK then
-                self.map:setTile(math.floor(self.x/self.map.tileWidth)+1,
-                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
-            end
-            if self.map:tileAt(self.x + self.width - 1, self.y) == JUMP_BLOCK then
-                self.map:setTile(math.floor((self.x + self.width -1)/self.map.tileWidth) + 1,
-                    math.floor(self.y/self.map.tileHeight)+1, JUMP_BLOCK_HIT)
-            end
-        end
-    end
+--     love.graphics.draw(self.texture, 
+--         self.animation:getCurrentFrames(), 
+--         math.floor(self.x + self.width /2 ), 
+--         math.floor(self.y + self.height /2 ),
+--         0, 
+--         scaleX,
+--         1,
+--         self.width/2,
+--         self.height/2
+--     )
 
-    self.y = math.min(self.y + self.dy * dt, self.map.tileHeight * 
-        ((self.map.mapHeight - 2)/2) - self.height)
-
-end
-
+-- end
 
 function Player:render()
-                
     local scaleX
 
+    -- set negative x scale factor if facing left, which will flip the sprite
+    -- when applied
     if self.direction == 'right' then
         scaleX = 1
     else
         scaleX = -1
     end
 
-    love.graphics.draw(self.texture, 
-        self.animation:getCurrentFrames(), 
-        math.floor(self.x + self.width /2 ), 
-        math.floor(self.y + self.height /2 ),
-        0, 
-        scaleX,
-        1,
-        self.width/2,
-        self.height/2
-    )
-
+    -- draw sprite with scale factor and offsets
+    love.graphics.draw(self.texture, self.currentFrame, math.floor(self.x + self.xOffset),
+        math.floor(self.y + self.yOffset), 0, scaleX, 1, self.xOffset, self.yOffset)
 end
-

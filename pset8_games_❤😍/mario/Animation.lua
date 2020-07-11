@@ -9,7 +9,7 @@ function Animation:init(params)
 end
 
 
-function Animation:getCurrentFrames()
+function Animation:getCurrentFrame()
     return self.frames[self.currentFrame]
 end
 

@@ -7,6 +7,7 @@ VIRTUAL_HEIGHT = 243
 Class = require 'class'
 push = require 'push'
 
+require 'Animation'
 require 'util'
 require 'Map'
 
