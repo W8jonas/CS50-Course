@@ -33,6 +33,8 @@ function Map:init()
     self.tileHeight = 16
     
     self.tileSprites = generateQuads(self.spriteSheet, self.tileWidth, self.tileHeight)
+    self.music = love.audio.newSource('sounds/music.wav', 'static')
+
 
     self.mapWidth = 30
     self.mapHeight = 28
@@ -126,6 +128,10 @@ function Map:init()
 
     end
     
+    self.music:setLooping(true)
+    self.music:setVolume(0.05)
+    self.music:play()
+
 end
 
 
