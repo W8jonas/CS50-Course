@@ -4,8 +4,10 @@ require "Animation"
 
 local MOVE_SPEED = 80
 local JUMP_VELOCITY = 400
+local MOVE_SPEED = 130
+local JUMP_VELOCITY = 700
 
-
+win = false
 
 function Player:init(map)
     self.x = 0
@@ -162,12 +164,45 @@ function Player:init(map)
 end
 
 function Player:update(dt)
+    love.graphics.printf('You win!!', 0, 42, VIRTUAL_WIDTH, 'center')
     self.behaviors[self.state](dt)
     self.animation:update(dt)
     self.currentFrame = self.animation:getCurrentFrame()
 
     self.x = self.x + self.dx * dt
     
+    self:checkJumpingCollision()
+
+    self:check_flag_Collision()
+
+    self.y = self.y + self.dy * dt
+end
+
+
+function Player:check_flag_Collision()
+    if self.dx < 0 then
+        if self.map:collides_to_flag(self.map:tileAt(self.x-1, self.y)) or
+            self.map:collides_to_flag(self.map:tileAt(self.x - 1, self.y + self.height -1)) then
+            
+            self.dx = 0
+            self.dy = 0
+            win = true 
+        end
+    end
+
+    if self.dx > 0 then
+        if self.map:collides_to_flag(self.map:tileAt(self.x + self.width, self.y)) or
+            self.map:collides_to_flag(self.map:tileAt(self.x + self.width, self.y + self.height - 1)) then
+
+            self.dx = 0
+            self.dy = 0
+            win = true 
+        end
+    end
+end
+
+
+function Player:checkJumpingCollision()
     if self.dy < 0 then
         if self.map:tileAt(self.x, self.y).id ~= TILE_EMPTY or
             self.map:tileAt(self.x + self.width-1, self.y).id ~= TILE_EMPTY then
@@ -197,13 +232,7 @@ function Player:update(dt)
             end
         end
     end
-
-    -- self.y = math.min(self.y + self.dy * dt, self.map.tileHeight * 
-    --     ((self.map.mapHeight - 2)/2) - self.height)
-
-    self.y = self.y + self.dy * dt
 end
-
 
 function Player:checkLeftCollision()
     if self.dx < 0 then
@@ -229,31 +258,6 @@ function Player:checkRightCollision()
 end
 
 
-
-
--- function Player:render()
-                
---     local scaleX
-
---     if self.direction == 'right' then
---         scaleX = 1
---     else
---         scaleX = -1
---     end
-
---     love.graphics.draw(self.texture, 
---         self.animation:getCurrentFrames(), 
---         math.floor(self.x + self.width /2 ), 
---         math.floor(self.y + self.height /2 ),
---         0, 
---         scaleX,
---         1,
---         self.width/2,
---         self.height/2
---     )
-
--- end
-
 function Player:render()
     local scaleX
 
@@ -268,4 +272,9 @@ function Player:render()
     -- draw sprite with scale factor and offsets
     love.graphics.draw(self.texture, self.currentFrame, math.floor(self.x + self.xOffset),
         math.floor(self.y + self.yOffset), 0, scaleX, 1, self.xOffset, self.yOffset)
+
+
+    if win then
+        love.graphics.printf('You win!!', 0, 50, self.x*2, 'center')
+    end
 end

@@ -22,6 +22,17 @@ MUSHROOM_BOTTOM = 11
 JUMP_BLOCK = 5
 JUMP_BLOCK_HIT = 9
 
+-- flags blocks
+FLAG_1 = 13
+FLAG_2 = 14
+FLAG_3 = 15
+
+-- flagpole blocks
+FLAGPOLE_TOP = 8
+FLAGPOLE_M = 12
+FLAGPOLE_BOTTOM = 16
+
+
 local SCROLL_SPEED = 62
 
 
@@ -36,7 +47,7 @@ function Map:init()
     self.music = love.audio.newSource('sounds/music.wav', 'static')
 
 
-    self.mapWidth = 30
+    self.mapWidth = 50
     self.mapHeight = 28
     self.tiles = {}
 
@@ -60,7 +71,7 @@ function Map:init()
 
     -- gerando o terreno usando vertical scan
     local x = 1
-    while x < self.mapWidth do
+    while x < self.mapWidth - 20 do
 
         -- 2% chance de gerar nuvens
         -- garantindo que existe espaco para colocar os dois blocos
@@ -124,16 +135,50 @@ function Map:init()
         else 
             x = x + 2
         end
-        
 
     end
-    
+
+    self:GeneratePyramid(x)
+
     self.music:setLooping(true)
     self.music:setVolume(0.05)
     self.music:play()
 
 end
 
+function Map:GeneratePyramid(mapWidth_x)
+    local pyramidDimension = 4 + math.random(3)
+    local pyramidHeight = 0
+    local x = mapWidth_x
+
+    for x = x, (self.mapWidth - 20)+20 do
+        for y = self.mapHeight/2, self.mapHeight do
+            self:setTile(x, y, TILE_BRICK)
+        end
+    end
+
+    for x = x, x+pyramidDimension do
+        for y = 0, pyramidHeight do
+            self:setTile(x, self.mapHeight/2-y, TILE_BRICK)
+        end
+        pyramidHeight = pyramidHeight + 1
+    end
+
+    x = x + pyramidDimension + 7
+
+    local position = self.mapHeight/2 - 1
+
+    for y = 0, pyramidDimension do
+        if y == 0 then
+            self:setTile(x, position-y, FLAGPOLE_BOTTOM)
+        elseif pyramidDimension ~= y then
+            self:setTile(x, position-y, FLAGPOLE_M)
+        else
+            self:setTile(x, position-y, FLAGPOLE_TOP)
+            self:setTile(x+1, position-y, FLAG_1)
+        end
+    end
+end
 
 function Map:collides(tile)
     -- define our collidable tiles
@@ -151,6 +196,24 @@ function Map:collides(tile)
 
     return false
 end
+
+function Map:collides_to_flag(tile)
+    -- define our collidable tiles
+    local collidables = {
+        FLAGPOLE_TOP, FLAGPOLE_M, FLAGPOLE_BOTTOM,
+        FLAG_1, FLAG_2, FLAG_3
+    }
+
+    -- iterate and return true if our tile type matches
+    for _, v in ipairs(collidables) do
+        if tile.id == v then
+            return true
+        end
+    end
+
+    return false
+end
+
 
 function Map:update(dt)
     self.player:update(dt)
