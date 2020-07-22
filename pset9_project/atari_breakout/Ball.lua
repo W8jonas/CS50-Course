@@ -45,5 +45,5 @@ end
 
 
 function Ball:render()
-    love.graphics.rectangle('fill', self.x, self.y, 4, 4)
+    love.graphics.rectangle('fill', self.x, self.y, ballDimension, ballDimension)
 end
