@@ -6,14 +6,14 @@ function Paddle:init(x, y, width, height)
     self.y = y 
     self.width = width 
     self.height = height
-    self.dy = 0
+    self.dx = 0
 end
 
 function Paddle:update(dt)
-    if self.dy < 0 then
-        self.y = math.max(0, self.y + self.dy * dt)
-    elseif self.dy > 0 then
-        self.y = math.min(VIRTUAL_HEIGTH-20, self.y + self.dy * dt)
+    if self.dx < 0 then
+        self.x = math.max(0, self.x + self.dx * dt)
+    elseif self.dx > 0 then
+        self.x = math.min(WINDOW_WIDTH - self.width, self.x + self.dx * dt)
     end
 end
 

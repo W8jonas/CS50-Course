@@ -14,6 +14,8 @@ brickRows = 20
 brickCols = 20
 bricks = {}
 
+PADDLE_SPEED = 400
+
 Class = require 'class'
 push = require 'push'
 
@@ -22,23 +24,34 @@ require 'Paddle'
 
 
 function love.load()
-    love.window.setTitle("Final Project CS50 - Breakout game")
-    love.graphics.setBackgroundColor(32, 32, 32, 255)
+	love.window.setTitle("Final Project CS50 - Breakout game")
+	love.graphics.setBackgroundColor(32, 32, 32, 255)
 
-    paddle = Paddle(5, 20, paddleWidth, paddleHeight)
-    ball = Ball(50,50, paddleWidth, paddleHeight)
+	paddle = Paddle(WINDOW_WIDTH/2-paddleWidth/2, WINDOW_HEIGTH-paddleHeight-50, paddleWidth, paddleHeight)
+	ball = Ball(50,50, paddleWidth, paddleHeight)
 
 end
 
 
 function love.update(dt)
-  paddle:update(dt)
-  ball:update(dt)
+
+	if love.keyboard.isDown('a') then
+		paddle.dx = - PADDLE_SPEED
+	elseif love.keyboard.isDown('d') then
+		paddle.dx = PADDLE_SPEED
+	else
+		paddle.dx = 0
+	end
+
+	paddle:update(dt)
+	ball:update(dt)
 end
 
 
 function love.keypressed(key)
-
+	if key == 'escape' then
+		love.event.quit()
+	end
 end
 
 
