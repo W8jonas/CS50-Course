@@ -28,7 +28,7 @@ function love.load()
 	love.graphics.setBackgroundColor(32, 32, 32, 255)
 
 	paddle = Paddle(WINDOW_WIDTH/2-paddleWidth/2, WINDOW_HEIGTH-paddleHeight-50, paddleWidth, paddleHeight)
-	ball = Ball(50,50, paddleWidth, paddleHeight)
+	ball = Ball(WINDOW_WIDTH/2,WINDOW_HEIGTH/2, paddleWidth, paddleHeight)
 
 end
 
@@ -41,6 +41,16 @@ function love.update(dt)
 		paddle.dx = PADDLE_SPEED
 	else
 		paddle.dx = 0
+	end
+
+	if ball:Collides(paddle) then
+		ball.dy = - ball.dy 
+
+		if ball.dx < 0 then
+			ball.dx = -math.random(20, 150)
+		else
+			ball.dx = math.random(20, 150)
+		end
 	end
 
 	paddle:update(dt)

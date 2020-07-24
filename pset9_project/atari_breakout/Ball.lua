@@ -18,7 +18,7 @@ function Ball:init(x, y, width, height)
 end
 
 function Ball:Collides(box)
-    if self.x > box.x + box.width or self.x + self.width < box.x then
+    if self.x > box.x + box.width or self.x < box.x then
         return false
     end
 
