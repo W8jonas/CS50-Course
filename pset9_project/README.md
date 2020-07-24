@@ -5,7 +5,7 @@ Start of Final project: Game Atari Brekout
 - [x] Mostrar bolinha
 - [x] Mostrar raquete
 - [x] Movimentar raquete
-- [ ] Colisões da raquete
+- [x] Colisões da raquete
 - [ ] Colisões da bolinha
 - [ ] Colocar os blocos
 - [ ] Colisão com os blocos
