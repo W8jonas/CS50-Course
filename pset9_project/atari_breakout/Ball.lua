@@ -11,8 +11,7 @@ function Ball:init(x, y, width, height)
     -- self.x = VIRTUAL_WIDTH/2-2
     -- ballY = VIRTUAL_HEIGTH/2-2
 
-    -- math.random(2) == 1 ? -100 : 100
-    self.dy = math.random(2) == 1 and -100 or 100
+    self.dy = math.random(2) == 1 and -BALL_SPEED or BALL_SPEED
     self.dx = math.random(-50, 50)
 
 end
@@ -30,11 +29,11 @@ function Ball:Collides(box)
 end
 
 function Ball:reset()
-    self.x = VIRTUAL_WIDTH/2-2
-    self.y = VIRTUAL_HEIGTH/2-2
+    self.x = WINDOW_WIDTH/2
+    self.y = WINDOW_HEIGTH/2
 
-    self.dx = math.random(2) == 1 and -100 or 100
-    self.dy = math.random(-50, 50)
+    self.dy = math.random(2) == 1 and -BALL_SPEED or BALL_SPEED
+    self.dx = math.random(-50, 50)
 end
 
 function Ball:update(dt)
@@ -56,10 +55,10 @@ function Ball:update(dt)
         self.x = WINDOW_WIDTH - self.x * dt
     end
 
-    -- if ball.y > WINDOW_HEIGTH then
-    --     ball.dy = - ball.dy
-    --     ball.y = WINDOW_HEIGTH - 4
-    -- end
+    if self.y > WINDOW_HEIGTH then
+        TOTAL_LIVES = TOTAL_LIVES - 1
+        self:reset()
+    end
 
 end
 

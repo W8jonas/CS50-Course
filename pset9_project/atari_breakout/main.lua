@@ -1,20 +1,59 @@
+-- Configurações de tela
 WINDOW_WIDTH = 800
 WINDOW_HEIGTH = 600
 
 VIRTUAL_WIDTH = 400
 VIRTUAL_HEIGTH = 200
 
+-- Configuracões de raquete e bola
 paddleWidth = 100
 paddleHeight = 20
 paddleSpeed = 400
 
 ballDimension = 10
 
-brickRows = 20
+PADDLE_SPEED = 400
+BALL_SPEED = 400
+
+-- Configuracões dos tijolos
+brickRows = 10
 brickCols = 20
 bricks = {}
 
-PADDLE_SPEED = 400
+brickWidth = 40
+brickHeight = 30
+local levels = {
+	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+	  { 0,1,1,1,0,1,1,1,1,0,1,1,1,0,0,1,1,0,0,0 },
+	  { 0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0 },
+	  { 0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0 },
+	  { 0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0 },
+	  { 0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,1,0,0 },
+	  { 0,1,1,1,0,1,1,1,1,0,1,1,1,0,0,1,1,0,0,0 },
+	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
+  }
+  
+  local colors = {
+	{ 255/255, 		0/255, 			0/255, 			255/255 },
+	{ 255/255, 		128/255, 		0/255, 			255/255, },
+	{ 255/255, 		255/255, 		0/255, 			255/255, },
+	{ 128/255, 		255/255, 		0/255, 			255/255, },
+	{ 0/255, 		255/255, 		0/255, 			255/255, },
+	{ 0/255, 		255/255, 		128/255, 		255/255, },
+	{ 0/255, 		255/255, 		255/255, 		255/255, },
+	{ 0/255, 		128/255, 		255/255, 		255/255, },
+	{ 0/255, 		0/255, 			255/255, 		255/255, },
+	{ 128/255, 		0/255, 			255/255, 		255/255, },
+	{ 255/255, 		0/255, 			255/255, 		255/255, },
+	{ 255/255, 		0/255, 			128/255, 		255/255, },
+  }
+
+  
+-- Configuracões do jogo
+
+TOTAL_LIVES = 5
 
 Class = require 'class'
 push = require 'push'
@@ -34,6 +73,18 @@ end
 
 
 function love.update(dt)
+	for j = 1, brickRows do
+		bricks[j] = {}
+		for i = 1, brickCols do
+		  	bricks[j][i] = 0
+		end
+	end
+
+	for _row = 1, brickRows do
+		for _column = 1, brickCols do
+		  	bricks[_row][_column] = levels[_row][_column]
+		end
+	end
 
 	if love.keyboard.isDown('a') then
 		paddle.dx = - PADDLE_SPEED
@@ -70,8 +121,27 @@ function love.draw()
 
   love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
+  love.graphics.setColor(16, 16, 16, 1)
   paddle:render()
   ball:render()
+
+  local c
+  
+  for j = 1, brickRows do
+    c = 1
+    
+    for i = 1, brickCols do
+      if bricks[j][i] == 1 then
+        love.graphics.setColor(16, 16, 16, 1)
+        love.graphics.rectangle("fill", (i - 1)*brickWidth, (j - 1)*brickHeight, brickWidth, brickHeight)
+        love.graphics.setColor(colors[c])
+        love.graphics.rectangle("fill", (i - 1)*brickWidth + 2, (j - 1)*brickHeight + 2, brickWidth - 4, brickHeight - 4)
+      end
+      
+      c = c + 1
+      c = c > 12 and 1 or c
+    end
+  end
 
   -- push:apply('end')
 end
