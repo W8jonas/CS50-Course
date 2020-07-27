@@ -22,38 +22,39 @@ bricks = {}
 
 brickWidth = 40
 brickHeight = 30
-local levels = {
+levels = {
 	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 	  { 0,1,1,1,0,1,1,1,1,0,1,1,1,0,0,1,1,0,0,0 },
 	  { 0,1,0,0,0,1,0,0,0,0,1,0,0,0,1,0,0,1,0,0 },
-	  { 0,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,1,0,0 },
-	  { 0,1,0,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,0,0 },
+	  { 0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0 },
+	  { 0,1,0,0,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0,0 },
 	  { 0,1,0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,1,0,0 },
 	  { 0,1,1,1,0,1,1,1,1,0,1,1,1,0,0,1,1,0,0,0 },
 	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
 	  { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }
   }
   
-  local colors = {
-	{ 255/255, 		0/255, 			0/255, 			255/255 },
-	{ 255/255, 		128/255, 		0/255, 			255/255, },
-	{ 255/255, 		255/255, 		0/255, 			255/255, },
-	{ 128/255, 		255/255, 		0/255, 			255/255, },
+colors = {
 	{ 0/255, 		255/255, 		0/255, 			255/255, },
 	{ 0/255, 		255/255, 		128/255, 		255/255, },
 	{ 0/255, 		255/255, 		255/255, 		255/255, },
 	{ 0/255, 		128/255, 		255/255, 		255/255, },
 	{ 0/255, 		0/255, 			255/255, 		255/255, },
+	{ 255/255, 		0/255, 			0/255, 			255/255, },
+	{ 255/255, 		128/255, 		0/255, 			255/255, },
+	{ 255/255, 		255/255, 		0/255, 			255/255, },
+	{ 128/255, 		255/255, 		0/255, 			255/255, },
 	{ 128/255, 		0/255, 			255/255, 		255/255, },
 	{ 255/255, 		0/255, 			255/255, 		255/255, },
 	{ 255/255, 		0/255, 			128/255, 		255/255, },
   }
 
-  
--- Configuracões do jogo
 
+-- Configuracões do jogo
+missingBricks = brickRows * brickCols
 TOTAL_LIVES = 5
+win = false 
 
 Class = require 'class'
 push = require 'push'
@@ -67,12 +68,8 @@ function love.load()
 	love.graphics.setBackgroundColor(32, 32, 32, 255)
 
 	paddle = Paddle(WINDOW_WIDTH/2-paddleWidth/2, WINDOW_HEIGTH-paddleHeight-50, paddleWidth, paddleHeight)
-	ball = Ball(WINDOW_WIDTH/2,WINDOW_HEIGTH/2, paddleWidth, paddleHeight)
+	ball = Ball(WINDOW_WIDTH/2,WINDOW_HEIGTH/2, ballDimension, ballDimension)
 
-end
-
-
-function love.update(dt)
 	for j = 1, brickRows do
 		bricks[j] = {}
 		for i = 1, brickCols do
@@ -85,6 +82,11 @@ function love.update(dt)
 		  	bricks[_row][_column] = levels[_row][_column]
 		end
 	end
+
+end
+
+
+function love.update(dt)
 
 	if love.keyboard.isDown('a') then
 		paddle.dx = - PADDLE_SPEED
@@ -104,6 +106,12 @@ function love.update(dt)
 		end
 	end
 
+	ball:CollidesWithBlocks(dt)
+
+	if missingBricks == 0 then 
+		win = true 
+	end
+
 	paddle:update(dt)
 	ball:update(dt)
 end
@@ -117,32 +125,34 @@ end
 
 
 function love.draw()
-  -- push:apply('start')
+	-- push:apply('start')
 
-  love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
+	love.graphics.clear(40 / 255, 45 / 255, 52 / 255, 255 / 255)
 
-  love.graphics.setColor(16, 16, 16, 1)
-  paddle:render()
-  ball:render()
+	love.graphics.setColor(16, 16, 16, 1)
+	paddle:render()
+	ball:render()
 
-  local c
-  
-  for j = 1, brickRows do
-    c = 1
-    
-    for i = 1, brickCols do
-      if bricks[j][i] == 1 then
-        love.graphics.setColor(16, 16, 16, 1)
-        love.graphics.rectangle("fill", (i - 1)*brickWidth, (j - 1)*brickHeight, brickWidth, brickHeight)
-        love.graphics.setColor(colors[c])
-        love.graphics.rectangle("fill", (i - 1)*brickWidth + 2, (j - 1)*brickHeight + 2, brickWidth - 4, brickHeight - 4)
-      end
-      
-      c = c + 1
-      c = c > 12 and 1 or c
-    end
-  end
+	if win == false then
+		local c
+		for j = 1, brickRows do
+			c = 1
+			for i = 1, brickCols do
+				if bricks[j][i] == 1 then
+					love.graphics.setColor(16, 16, 16, 1)
+					love.graphics.rectangle("fill", (i - 1)*brickWidth, (j - 1)*brickHeight, brickWidth, brickHeight)
+					love.graphics.setColor(colors[c])
+					love.graphics.rectangle("fill", (i - 1)*brickWidth + 2, (j - 1)*brickHeight + 2, brickWidth - 4, brickHeight - 4)
+				end
+				
+				c = c + 1
+				c = c > 12 and 1 or c
+			end
+		end
+	else
+		love.graphics.printf('Você ganhou o jogo', 0, 32, VIRTUAL_WIDTH/2, 'center')
+	end
 
-  -- push:apply('end')
+	-- push:apply('end')
 end
 

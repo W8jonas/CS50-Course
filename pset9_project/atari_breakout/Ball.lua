@@ -63,6 +63,27 @@ function Ball:update(dt)
 end
 
 
+function Ball:CollidesWithBlocks(dt) 
+    for j = 1, brickRows do
+        for i = 1, brickCols do
+            if bricks[j][i] == 1 then
+                missingBricks = missingBricks - 1
+                
+                local bsx = (i - 1) * brickWidth - self.width
+                local bex = i * brickWidth + self.width
+                local bsy = (j - 1) * brickHeight - self.height
+                local bey = j * brickHeight + self.height
+                
+                if self.x > bsx and self.x < bex and self.y > bsy and self.y < bey then
+                    bricks[j][i] = 0
+                    -- score = score + 100
+                    self.dy = -self.dy
+                end
+            end
+        end
+    end
+end
+
 function Ball:render()
     love.graphics.rectangle('fill', self.x, self.y, ballDimension, ballDimension)
 end
