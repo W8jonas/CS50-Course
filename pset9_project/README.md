@@ -8,7 +8,7 @@ Start of Final project: Game Atari Brekout
 - [x] Colisões da raquete
 - [x] Colisões da bolinha
 - [x] Colocar os blocos
-- [ ] Colisão com os blocos
+- [x] Colisão com os blocos
 - [x] Contador de vidas
 - [ ] Finalizar jogo
 
