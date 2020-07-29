@@ -11,7 +11,7 @@ function Ball:init(x, y, width, height)
     -- self.x = VIRTUAL_WIDTH/2-2
     -- ballY = VIRTUAL_HEIGTH/2-2
 
-    self.dy = math.random(2) == 1 and -BALL_SPEED or BALL_SPEED
+    self.dy = BALL_SPEED
     self.dx = math.random(-50, 50)
 
 end
@@ -32,7 +32,7 @@ function Ball:reset()
     self.x = WINDOW_WIDTH/2
     self.y = WINDOW_HEIGTH/2
 
-    self.dy = math.random(2) == 1 and -BALL_SPEED or BALL_SPEED
+    self.dy = BALL_SPEED/3
     self.dx = math.random(-50, 50)
 end
 
@@ -67,7 +67,6 @@ function Ball:CollidesWithBlocks(dt)
     for j = 1, brickRows do
         for i = 1, brickCols do
             if bricks[j][i] == 1 then
-                missingBricks = missingBricks - 1
                 
                 local bsx = (i - 1) * brickWidth - self.width
                 local bex = i * brickWidth + self.width
@@ -76,8 +75,30 @@ function Ball:CollidesWithBlocks(dt)
                 
                 if self.x > bsx and self.x < bex and self.y > bsy and self.y < bey then
                     bricks[j][i] = 0
-                    -- score = score + 100
-                    self.dy = -self.dy
+                    missingBricks = missingBricks - 1
+                    -- self.dy = -self.dy
+
+
+                    local bcx = (i - 1) * brickWidth + brickWidth / 2
+                    local bcy = (j - 1) * brickHeight + brickHeight / 2
+                    
+                    if self.x < bcx and self.dx > 0 then
+                        self.dx = -self.dx * 1.03
+                    end
+                    
+                    if self.x > bcx and self.dx < 0 then
+                        self.dx = -self.dx * 1.03
+                    end
+
+                    if self.y < bcy and self.dy > 0 then
+                        self.dy = -self.dy * 1.03
+                    end
+                    
+                    if self.y > bcy and self.dy < 0 then
+                        self.dy = -self.dy * 1.03
+                    end
+
+
                 end
             end
         end

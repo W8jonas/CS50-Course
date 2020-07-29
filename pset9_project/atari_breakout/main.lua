@@ -52,7 +52,7 @@ colors = {
 
 
 -- Configuracões do jogo
-missingBricks = brickRows * brickCols
+missingBricks = 0
 TOTAL_LIVES = 5
 win = false 
 
@@ -79,7 +79,10 @@ function love.load()
 
 	for _row = 1, brickRows do
 		for _column = 1, brickCols do
-		  	bricks[_row][_column] = levels[_row][_column]
+			  bricks[_row][_column] = levels[_row][_column]
+			  if levels[_row][_column] == 1 then 
+				missingBricks = missingBricks + 1
+			  end
 		end
 	end
 
@@ -97,13 +100,16 @@ function love.update(dt)
 	end
 
 	if ball:Collides(paddle) then
-		ball.dy = - ball.dy 
+		ball.dy = - ball.dy * 1.10
 
-		if ball.dx < 0 then
-			ball.dx = -math.random(20, 150)
+		if (paddle.dx < 0) then
+			ball.dx = ball.dx * 1.06 * 1
 		else
-			ball.dx = math.random(20, 150)
+			ball.dx = ball.dx * 1.06 * -1
 		end
+
+		-- ball.dx = ball.dx + paddle.dx - math.random(20, 150)
+		
 	end
 
 	ball:CollidesWithBlocks(dt)
@@ -112,8 +118,10 @@ function love.update(dt)
 		win = true 
 	end
 
-	paddle:update(dt)
-	ball:update(dt)
+	if win == false then
+		paddle:update(dt)
+		ball:update(dt)
+	end
 end
 
 
@@ -150,8 +158,10 @@ function love.draw()
 			end
 		end
 	else
-		love.graphics.printf('Você ganhou o jogo', 0, 32, VIRTUAL_WIDTH/2, 'center')
+		love.graphics.print('YOU WIN!', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
 	end
+
+	-- love.graphics.print(missingBricks, WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
 
 	-- push:apply('end')
 end
