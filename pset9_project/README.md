@@ -10,5 +10,5 @@ Start of Final project: Game Atari Brekout
 - [x] Colocar os blocos
 - [x] Colisão com os blocos
 - [x] Contador de vidas
-- [ ] Finalizar jogo
+- [x] Finalizar jogo
 
