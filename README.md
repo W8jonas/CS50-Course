@@ -1,43 +1,47 @@
-Todos os exercícios resolvidos do curso CS50 de Harvard.
 
-Nome, linguagem, descrição de cada um:
+#### Todos os exercícios resolvidos do curso CS50 de Harvard.
+
+Separado por: Semana, linguagem, nome de cada um: <br/>
 Mais detalhes consultar o README de cada exercício.
+<br/>
 
-PSET 1 - C
-    Hello
-    cash
-    mario-less
+[x] PSET 1 - C
+* Hello
+* cash
+* mario-less
 
-PSET 2 - C
-    readability
-    substitution
+[x] PSET 2 - C
+* readability
+* substitution
 
-PSET 3 - C
-    plurality
-    runoff
+[x] PSET 3 - C
+* plurality
+* runoff
 
-PSET 4 - C
-    filter
-    recover
+[x] PSET 4 - C
+* filter
+* recover
 
-PSET 5 - C
-    speller
+[x] PSET 5 - C
+* speller
 
-PSET 6 - Python
-    Hello
-    mario-more
-    cash
-    readability
-    DNA
+[x] PSET 6 - Python
+* Hello
+* mario-more
+* cash
+* readability
+* DNA
 
-PSET 7 - SQL
+[x] PSET 7 - SQL
+    * Movies
+    * Houses
+[x] Tracks: Games
+* Pong
+* Mario
 
-Tracks: Games
-    Pong
-    Mario
 
-
-Final project: 
-    Game Atari Brekout
-
+`In progress` | Final project
+* Game Atari Brekout
+* Vídeo de apresentação
+* Submissão do formulário
 
