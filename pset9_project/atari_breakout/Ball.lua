@@ -32,7 +32,7 @@ function Ball:reset()
     self.x = WINDOW_WIDTH/2
     self.y = WINDOW_HEIGTH/2
 
-    self.dy = BALL_SPEED/3
+    self.dy = BALL_SPEED
     self.dx = math.random(-50, 50)
 end
 

@@ -13,7 +13,7 @@ paddleSpeed = 400
 ballDimension = 10
 
 PADDLE_SPEED = 400
-BALL_SPEED = 400
+BALL_SPEED = 200
 
 -- Configuracões dos tijolos
 brickRows = 10
@@ -99,20 +99,28 @@ function love.update(dt)
 		paddle.dx = 0
 	end
 
+	ball:CollidesWithBlocks(dt)
+
 	if ball:Collides(paddle) then
 		ball.dy = - ball.dy * 1.10
 
-		if (paddle.dx < 0) then
-			ball.dx = ball.dx * 1.06 * 1
-		else
-			ball.dx = ball.dx * 1.06 * -1
-		end
-
-		-- ball.dx = ball.dx + paddle.dx - math.random(20, 150)
+		-- if (paddle.dx < 0) then
+		-- 	ball.dx = ball.dx * 1.06 * -1
+		-- else
+		-- 	ball.dx = ball.dx * 1.06 * 1
+		-- end
 		
+		-- ball.dx = ball.dx + paddle_x
+		-- ball.dx = ball.dx + paddle.dx - math.random(20, 150)
+
+
+		local paddle_x = math.min(math.max(-50, paddle.dx), 50)
+		
+		ball.dx = math.min(math.max(-150, ball.dx + paddle_x), 150)
+
+		ball.dy = math.min(math.max(-650, ball.dy), 650)
 	end
 
-	ball:CollidesWithBlocks(dt)
 
 	if missingBricks == 0 then 
 		win = true 
