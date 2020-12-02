@@ -158,24 +158,27 @@ function love.draw()
 	paddle:render()
 	ball:render()
 
-	if win == false then
-		local c
-		for j = 1, brickRows do
-			c = 1
-			for i = 1, brickCols do
-				if bricks[j][i] == 1 then
-					love.graphics.setColor(16, 16, 16, 1)
-					love.graphics.rectangle("fill", (i - 1)*brickWidth, (j - 1)*brickHeight, brickWidth, brickHeight)
-					love.graphics.setColor(colors[c])
-					love.graphics.rectangle("fill", (i - 1)*brickWidth + 2, (j - 1)*brickHeight + 2, brickWidth - 4, brickHeight - 4)
-				end
-				
-				c = c + 1
-				c = c > 12 and 1 or c
+	
+	local c
+	for j = 1, brickRows do
+		c = 1
+		for i = 1, brickCols do
+			if bricks[j][i] == 1 then
+				love.graphics.setColor(16, 16, 16, 1)
+				love.graphics.rectangle("fill", (i - 1)*brickWidth, (j - 1)*brickHeight, brickWidth, brickHeight)
+				love.graphics.setColor(colors[c])
+				love.graphics.rectangle("fill", (i - 1)*brickWidth + 2, (j - 1)*brickHeight + 2, brickWidth - 4, brickHeight - 4)
 			end
+			
+			c = c + 1
+			c = c > 12 and 1 or c
 		end
-	else
+	end
+
+	if win == true then
 		love.graphics.print('YOU WIN!', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
+	elseif gameState == 'playing' then
+		love.graphics.print('Game paused, PRESS SPACE to continue.', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
 	end
 
 	-- love.graphics.print(missingBricks, WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
