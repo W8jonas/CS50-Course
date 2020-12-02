@@ -55,6 +55,7 @@ colors = {
 missingBricks = 0
 TOTAL_LIVES = 5
 win = false 
+gameState = "pause"
 
 Class = require 'class'
 push = require 'push'
@@ -126,7 +127,7 @@ function love.update(dt)
 		win = true 
 	end
 
-	if win == false then
+	if win == false and gameState == "pause" then
 		paddle:update(dt)
 		ball:update(dt)
 	end
@@ -136,7 +137,15 @@ end
 function love.keypressed(key)
 	if key == 'escape' then
 		love.event.quit()
-	end
+	elseif key == 'enter' or key == 'return' or key == 'space' then
+
+        if gameState == 'playing' then
+            gameState = 'pause'
+        elseif gameState == 'pause' then
+            gameState = 'playing'
+		end
+		
+    end
 end
 
 
