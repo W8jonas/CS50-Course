@@ -176,9 +176,11 @@ function love.draw()
 	end
 
 	if win == true then
+		love.graphics.setColor(16, 16, 16, 1)
 		love.graphics.print('YOU WIN!', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
 	elseif gameState == 'playing' then
-		love.graphics.print('Game paused, PRESS SPACE to continue.', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
+		love.graphics.setColor(16, 16, 16, 1)
+		love.graphics.print('Game paused, PRESS SPACE to continue.', WINDOW_WIDTH/2-120, WINDOW_HEIGTH/2)
 	end
 
 	-- love.graphics.print(missingBricks, WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
