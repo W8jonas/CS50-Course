@@ -11,5 +11,6 @@ Start of Final project: Game Atari Brekout
 - [x] Colisão com os blocos
 - [x] Contador de vidas
 - [x] Melhorando jogabilidade
+- [ ] Mostrar contador mortes canto superior esquerdo 
+- [ ] Mostrar contador de vida restantes canto superior esquerdo 
 - [x] Finalizar jogo
-
