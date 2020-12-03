@@ -174,6 +174,10 @@ function love.draw()
 			c = c > 12 and 1 or c
 		end
 	end
+	
+	love.graphics.setColor(16, 16, 16, 1)
+	love.graphics.print('total lives: ' .. TOTAL_LIVES, 30, 10)
+	love.graphics.print('bricks remaining: ' .. missingBricks, 30, 25)
 
 	if win == true then
 		love.graphics.setColor(16, 16, 16, 1)
