@@ -55,7 +55,7 @@ colors = {
 missingBricks = 0
 TOTAL_LIVES = 5
 win = false 
-gameState = "pause"
+gameState = "playing"
 
 Class = require 'class'
 push = require 'push'
@@ -184,7 +184,7 @@ function love.draw()
 		love.graphics.print('YOU WIN!', WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
 	elseif gameState == 'playing' then
 		love.graphics.setColor(16, 16, 16, 1)
-		love.graphics.print('Game paused, PRESS SPACE to continue.', WINDOW_WIDTH/2-120, WINDOW_HEIGTH/2)
+		love.graphics.print('Game paused, PRESS SPACE to continue.', WINDOW_WIDTH/2-120, WINDOW_HEIGTH/2-40)
 	end
 
 	-- love.graphics.print(missingBricks, WINDOW_WIDTH/2, WINDOW_HEIGTH/2)
