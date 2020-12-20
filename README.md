@@ -40,8 +40,14 @@ Mais detalhes consultar o README de cada exercício.
 * Mario
 
 
-`In progress` | Final project
+Final project
 * Game Atari Brekout
 * Vídeo de apresentação
 * Submissão do formulário
 
+<br/>
+<br/>
+
+## Certificado
+
+![](CS50x_Certificate.png)
