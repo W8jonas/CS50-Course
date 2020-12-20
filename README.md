@@ -1,5 +1,5 @@
 
-#### Todos os exercícios resolvidos do curso CS50 de Harvard.
+## Todos os exercícios resolvidos do curso CS50 de Harvard.
 
 Separado por: Semana, linguagem, nome de cada um: <br/>
 Mais detalhes consultar o README de cada exercício.
@@ -33,14 +33,15 @@ Mais detalhes consultar o README de cada exercício.
 * DNA
 
 [x] PSET 7 - SQL
-    * Movies
-    * Houses
+* Movies
+* Houses
+
 [x] Tracks: Games
 * Pong
 * Mario
 
 
-Final project
+[x] Final project
 * Game Atari Brekout
 * Vídeo de apresentação
 * Submissão do formulário
